@@ -1,4 +1,4 @@
-
+import java.awt.Color;
 
 public class ImageLayer {
   IPImage image;
@@ -19,6 +19,10 @@ public class ImageLayer {
   public ImageLayer clone(){
     ImageLayer toReturn = new ImageLayer(this.image.clone());
     return toReturn;
+  }
+
+  public Color getPixel(int i, int j) {
+    return image.getPixel(i,j);
   }
 
 }

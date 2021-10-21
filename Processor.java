@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.awt.Color;
+
 
 import javax.imageio.ImageIO;
 import java.awt.Graphics2D;
@@ -65,12 +67,17 @@ public class Processor {
     return this.currentLayer().image();
   }
 
+  public Processor histogram(){
+    currentLayer().image().histogram();
+    return this;
+  }
+
   public Processor histogram(int i) {
     currentLayer().image().histogram(i);
     return this;
   }
 
-  public Processor save(String string) {
+  public Processor saveCurrentLayer(String string) {
     this.saveLayer(string);
     return this;
   }
@@ -131,6 +138,17 @@ public class Processor {
   private void clearLayers() {
     layers.clear();
     this.currentLayer = -1;
+  }
+
+  public Processor grayscale() {
+    currentLayer().image().grayscale();
+    
+    return this;
+  }
+
+  public Color getPixel(int i, int j) {
+    return currentLayer().getPixel(i,j);
+    //return new Color(currentLayer().image().image.getRGB(i,j));
   }
 
   

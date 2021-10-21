@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.awt.Color;
 
-public class IPImage{
+public class IPImage {
 
   BufferedImage image;
 
@@ -167,7 +167,9 @@ public class IPImage{
 
   public IPImage histogram(int cap) {
 
-    int height = 300;
+    if (cap < 1)
+      cap = 256;
+    int height = cap;
     var toReturn = new BufferedImage(256, height, BufferedImage.TYPE_4BYTE_ABGR);
 
     // Generate the histogram info
@@ -194,8 +196,8 @@ public class IPImage{
     g.fillRect(0, 0, counts.length, height);
 
     var maxValue = Arrays.stream(counts).max().orElse(0);
-    if (cap != -1)
-      maxValue = cap;
+    // i//f (cap != -1)
+    // maxValue = cap;
     for (var i = 0; i < counts.length; i++) {
       int percent = (int) (counts[i] / (double) maxValue * height);
       g.setColor(Color.WHITE);
@@ -307,10 +309,39 @@ public class IPImage{
     return this;
   }
 
-  public IPImage clone(){
-    IPImage toReturn = new IPImage(this.image);
+  public IPImage grayscale() {
+    for (var h = 0; h < this.image.getHeight(); h++) {
+      for (var w = 0; w < this.image.getWidth(); w++) {
+
+        var pixelInt = this.image.getRGB(w, h);
+        var pixelColor = new Color(pixelInt);
+
+        float[] hsv = new float[3];
+        myConversion(pixelColor.getRed(), pixelColor.getGreen(), pixelColor.getBlue(), hsv);
+
+        int value = (int) Math.floor(Math.min(255, hsv[2] * 255.0f));
+
+        this.image.setRGB(w, h, new Color(value, value, value).getRGB());
+      }
+    }
+    return this;
+
+  }
+
+  public IPImage clone() {
+
+    // See https://stackoverflow.com/a/19327237/10047920
+    BufferedImage b = new BufferedImage(this.image.getWidth(), this.image.getHeight(), this.image.getType());
+    Graphics2D g = (Graphics2D) b.getGraphics();
+    g.drawImage(this.image, 0, 0, null);
+    g.dispose();
+
+    IPImage toReturn = new IPImage(b);
     return toReturn;
   }
 
+  public Color getPixel(int i, int j) {
+    return new Color(image.getRGB(i, j));
+  }
 
 }
