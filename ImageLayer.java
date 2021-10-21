@@ -25,4 +25,6 @@ public class ImageLayer {
     return image.getPixel(i,j);
   }
 
+  
+
 }

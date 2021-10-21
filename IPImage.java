@@ -344,4 +344,26 @@ public class IPImage {
     return new Color(image.getRGB(i, j));
   }
 
+  public IPImage applyCurve(IPixelFunction fun) {
+    for (var h = 0; h < this.image.getHeight(); h++) {
+      for (var w = 0; w < this.image.getWidth(); w++) {
+
+        var pixelInt = this.image.getRGB(w, h);
+        var pixelColor = new Color(pixelInt);
+
+        float[] hsv = new float[3];
+        myConversion(pixelColor.getRed(), pixelColor.getGreen(), pixelColor.getBlue(), hsv);
+
+        float value = Math.max(0, Math.min(1, fun.run(hsv[2])));
+
+
+        this.image.setRGB(w, h, new Color(value, value, value).getRGB());
+      }
+    }
+    return this;
+
+    
+
+  }
+
 }
